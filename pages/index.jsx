@@ -12,16 +12,6 @@ export default function Home() {
   const [processing, setProcessing] = useState(false);
 
   const handleGameSelect = (mode) => {
-    setSelectedMode(mode);
-    setShowModal(true);
-  };
-
-  const handlePayment = async (amount) => {
-    setProcessing(true);
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setProcessing(false);
-    setShowModal(false);
     router.push('/game');
   };
 

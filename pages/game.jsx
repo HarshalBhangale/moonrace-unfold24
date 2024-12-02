@@ -96,7 +96,7 @@ const GamePage = () => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     setProcessing(false);
     setShowModal(false);
-    router.push('/game/play');
+    window.location.href = 'http://localhost:3010/game/play';
   };
 
   const handleGameEnter = (event) => {

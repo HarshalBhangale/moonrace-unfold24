@@ -11,7 +11,7 @@ const style = {
     logoContainer: `flex items-center cursor-pointer hover:opacity-90 transition-all duration-300`,
     logoText: `ml-[0.8rem] text-transparent bg-clip-text bg-gradient-to-r from-[#F3BA2F] to-[#FFD700] font-semibold text-2xl`,
     headerItems: `font-Outfit font-light flex items-center`,
-    headerItem: `font-Outfit text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-white px-4 font-bold hover:from-[#F3BA2F] hover:to-[#FFD700] cursor-pointer transition-all duration-300`,
+    headerItem: `font-Outfit text-white bg-clip-text bg-gradient-to-r from-gray-300 to-white px-4 font-bold hover:from-[#F3BA2F] hover:to-[#FFD700] cursor-pointer transition-all duration-300`,
     headerIcon: `text-[#8a939b] text-3xl font-black px-4 hover:text-[#F3BA2F] cursor-pointer transition-colors duration-300`,
 };
 
@@ -79,7 +79,7 @@ export default function Navbar() {
                         router.push("/profile");
                     }}
                 >
-                    <CgProfile />
+                    <CgProfile size={30} />
                 </div>
 
                 <div className="ml-4 hover:scale-105 transition-transform duration-300">
