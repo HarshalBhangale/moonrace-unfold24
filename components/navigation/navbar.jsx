@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -5,6 +6,9 @@ import React, { useState } from "react";
 import logo from "../../public/images/logo-betting.png";
 import { CgProfile } from "react-icons/cg";
 import {ConnectButton} from '@suiet/wallet-kit';
+import { useOkto } from 'okto-sdk-react';
+import { useEffect } from "react";
+import { AuthType } from "okto-sdk-react";
 
 const style = {
     wrapper: `bg-gradient-to-r from-gray-900 via-black to-gray-900 w-screen px-[1.2rem] py-[0.8rem] flex justify-between border-b border-[#F3BA2F] shadow-[0_4px_12px_rgba(243,186,47,0.3)]`,
@@ -18,6 +22,13 @@ const style = {
 export default function Navbar() {
     const router = useRouter();
     const [navbar, setNavbar] = useState(false);
+    const { isLoggedIn, showOnboardingModal, closeModal, logOut } = useOkto();
+
+    async function handleConnectWallet() {
+        console.log("connect wallet");
+        showOnboardingModal(AuthType.EMAIL)
+    }
+
 
     return (
         <div className={style.wrapper}>
@@ -92,7 +103,11 @@ export default function Navbar() {
                 </div>
 
                 <div className="ml-4 hover:scale-105 transition-transform duration-300">
-                    <ConnectButton/>
+                {isLoggedIn ? (
+                    <div className="bg-gradient-to-r from-[#F3BA2F] to-[#FFD700] text-transparent bg-clip-text font-bold" onClick={()=>{console.log("logout"); logOut()}}>Disconnect Wallet</div>
+                ) : (
+                    <div className="bg-gradient-to-r from-[#F3BA2F] to-[#FFD700] text-transparent bg-clip-text font-bold" onClick={handleConnectWallet}>Connect Wallet</div>
+                )}
                 </div>
             </div>
         </div>
