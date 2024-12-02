@@ -76,6 +76,15 @@ export default function Navbar() {
                 <div
                     className={style.headerItem}
                     onClick={() => {
+                        router.push("/leaderboard");
+                    }}
+                >
+                    Leaderboard
+                </div>
+
+                <div
+                    className={style.headerItem}
+                    onClick={() => {
                         router.push("/profile");
                     }}
                 >
