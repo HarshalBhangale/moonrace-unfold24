@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { walletAddressAtom } from "@/lib/state";
 import { motion } from 'framer-motion';
 import { FaTrophy, FaGamepad, FaClock, FaUsers, FaCoins, FaRegClock } from 'react-icons/fa';
+import { useOkto } from 'okto-sdk-react';
 
 const GamePage = () => {
   const router = useRouter();
@@ -15,6 +16,8 @@ const GamePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedMode, setSelectedMode] = useState('');
   const [processing, setProcessing] = useState(false);
+
+  const { isLoggedIn, executeRawTransaction } = useOkto();
 
   // Generate mock events data
   useEffect(() => {
@@ -90,13 +93,54 @@ const GamePage = () => {
     return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  async function handleStake() {
+    if (!isLoggedIn) {
+      throw new Error("Wallet not initialized");
+    }
+    setIsLoading(true);
+    const createStakeData = {
+      id: getRandomId(),
+      amount: Number(amount),
+      timeleft: timeLeft,
+      maxClaims: Number(maxClaims),
+      ownerName: userName,
+      desc: desc,
+    };
+    // console.log("CreateLifafaData: ", createLifafaData);
+    // console.log("walletpublickey", walletPublicKey.toString());
+    try {
+      const rawTxn = await createStake(
+        createStakeData.id,
+        createStakeData.amount * 10 ** selectedToken.decimals,
+        createStakeData.timeleft,
+        createStakeData.maxClaims,
+        createStakeData.ownerName,
+        createStakeData.desc,
+        ClaimMode.Random,
+        new PublicKey(selectedToken.address),
+        walletPublicKey,
+      );
+      const txnHash = await executeRawTransaction(rawTxn);
+      console.log("txnHash: ", txnHash);
+    } catch (error) {
+      console.error("could not stake: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const handlePayment = async (amount) => {
     setProcessing(true);
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     setProcessing(false);
     setShowModal(false);
-    window.location.href = 'http://localhost:3010/game/play';
+    try {
+      handleStake();
+      window.location.href = 'http://localhost:3010/game/play';
+    } catch (error) {
+      console.error("handleStake: ", error);
+    }
   };
 
   const handleGameEnter = (event) => {
